@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BNBU 列车运行区段指示牌</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 使用 Inter 字体 */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column; /* 更改为列方向，以便堆叠水牌和消息 */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* 新的动态背景：柔和的蓝色与紫色渐变，并添加动画 */
+            background: #0166a4; /* 蓝到紫的线性渐变 */
+            background-size: 200% 200%; /* 使渐变更大以实现动画效果 */
+            animation: gradientMove 18s ease infinite alternate; /* 背景的平滑移动动画，稍微慢一些 */
+            overflow: hidden; /* 防止滚动条出现 */
+            position: relative; /* 为可能添加的粒子等元素提供定位基础 */
+        }
+
+        /* 背景渐变动画 */
+        @keyframes gradientMove {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        /* 火车水牌的自定义样式 - 尝试玻璃质感 (Glassmorphism) */
+        .train-sign {
+            background-color: rgba(255, 255, 255, 0.15); /* 半透明白色背景 */
+            backdrop-filter: blur(15px); /* 磨砂玻璃效果 */
+            -webkit-backdrop-filter: blur(15px); /* Safari 浏览器支持 */
+            border: 2px solid rgba(255, 255, 255, 0.3); /* 纤细的白色边框 */
+            padding: 2.5rem 5rem; /* 增加内边距 */
+            border-radius: 25px; /* 更圆的角 */
+            /* 阴影效果，模拟深度和内部光晕 */
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                        0 0 0 1px rgba(255, 255, 255, 0.1);
+            color: #ffffff; /* 白色文字 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2.5rem; /* 增加元素间距 */
+            flex-wrap: wrap; /* 允许元素换行，适应小屏幕 */
+            max-width: 90%; /* 最大宽度限制 */
+            text-align: center;
+            animation: fadeInScale 1s ease-out forwards; /* 淡入和缩放动画 */
+        }
+
+        /* 水牌的淡入和缩放动画 */
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .station-name {
+            font-size: 4.8rem; /* 稍微增大的字体 */
+            font-weight: 800; /* 更粗的字体 */
+            /* 文字发光效果 */
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
+                         0 0 20px rgba(255, 255, 255, 0.6);
+            white-space: nowrap; /* 防止名称换行 */
+        }
+
+        .arrow {
+            font-size: 4.5rem; /* 飞机图标大小 */
+            color: #ffeb3b; /* 亮黄色飞机图标 */
+            animation: flyArrow 2s infinite ease-in-out; /* 飞机飞行动画 */
+            display: inline-block; /* 确保transform可以应用 */
+        }
+
+        /* 飞机图标的飞行动画 */
+        @keyframes flyArrow {
+            0%, 100% { transform: translateX(0) scale(1); opacity: 1; }
+            50% { transform: translateX(20px) scale(1.1); opacity: 0.8; } /* 稍微向右移动并放大 */
+        }
+
+        /* 跳转提示消息样式 */
+        .redirect-message {
+            margin-top: 2rem; /* 与水牌的间距 */
+            color: #ffffff; /* 白色文字 */
+            font-size: 1.5rem;
+            opacity: 0; /* 初始隐藏 */
+            animation: fadeInMessage 1s forwards; /* 淡入动画 */
+            animation-delay: 2s; /* 动画延迟2秒开始 */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* 文字阴影 */
+        }
+
+        /* 跳转提示消息的淡入动画 */
+        @keyframes fadeInMessage {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+
+        /* 媒体查询，适应小屏幕 */
+        @media (max-width: 768px) {
+            .train-sign {
+                padding: 1.5rem 2.5rem;
+                flex-direction: column; /* 小屏幕上垂直排列 */
+                gap: 1.5rem;
+            }
+            .station-name {
+                font-size: 3.5rem;
+            }
+            .arrow {
+                font-size: 3.5rem;
+                transform: rotate(90deg); /* 飞机图标垂直显示 */
+                animation: flyArrowVertical 2s infinite ease-in-out; /* 垂直飞机的飞行动画 */
+            }
+            /* 垂直飞机的飞行动画 */
+            @keyframes flyArrowVertical {
+                0%, 100% { transform: rotate(90deg) translateY(0) scale(1); opacity: 1; }
+                50% { transform: rotate(90deg) translateY(20px) scale(1.1); opacity: 0.8; } /* 稍微向下移动并放大 */
+            }
+            .redirect-message {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .train-sign {
+                padding: 1rem 1.5rem;
+                gap: 1rem;
+            }
+            .station-name {
+                font-size: 2.5rem;
+            }
+            .arrow {
+                font-size: 2.5rem;
+            }
+            .redirect-message {
+                font-size: 1rem;
+            }
+        }
+    </style>
+    <!-- 谷歌字体：Inter (已包含粗体字重) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="train-sign">
+        <span class="station-name">UIC</span>
+        <span class="arrow">✈️</span> <!-- 更换为飞机图标 -->
+        <span class="station-name">BNBU</span>
+    </div>
+
+    <div class="redirect-message">
+        即将跳转到BNBU官网...
+    </div>
+
+    <script>
+        // 设置3秒后跳转到目标URL
+        const redirectDelay = 3000; // 3000毫秒 = 3秒
+        const targetUrl = "https://www.uic.edu.cn/";
+
+        setTimeout(() => {
+            window.location.href = targetUrl;
+        }, redirectDelay);
+    </script>
+
+</body>
+</html>
